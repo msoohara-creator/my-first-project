@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税専門官募集 ポスター</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@900&display=block" rel="stylesheet">
+<style>
+  /*
+   * The poster is laid out on its art grid: 1 CSS px = 1 pixel-art dot.
+   * 546 x 773 dots = B3 (364 x 515 mm, 1:1.414) at 1.5 dots/mm.
+   * render.cjs screenshots it at deviceScaleFactor 8 for print.
+   */
+  :root {
+    --navy: #1A2850;
+    --navy-deep: #0E1530;
+    --white: #FFFFFF;
+    --pale-gold: #EAD9A0;
+    --gold: #E9B92F;
+    --gold-hi: #FFE15A;
+    --sky: #6CBDE8;
+    --green: #5FB548;
+    --band: #F3F7FB;
+    --line: #C5D3E3;
+  }
+  html, body { margin: 0; background: #DDE6EF; }
+  body { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; }
+  #stage { transform-origin: top center; }
+  #poster {
+    position: relative; width: 546px; height: 773px; overflow: hidden;
+    background: #8FCBF2;
+    font-family: "DotGothic16", sans-serif; color: var(--white);
+    -webkit-font-smoothing: antialiased;
+  }
+  .abs { position: absolute; }
+  .px { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+  .full { position: absolute; left: 0; top: 0; width: 546px; height: 773px; }
+
+  /* ---- Layer 1: pale, soft, low-contrast backdrop ---- */
+  #bg { filter: blur(0.6px) saturate(0.78) contrast(0.88) brightness(1.03); }
+  #sunlight {
+    background:
+      radial-gradient(ellipse 260px 220px at 8px 6px, rgba(255,252,236,.85), rgba(255,250,230,.35) 45%, rgba(255,250,230,0) 75%),
+      linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 40%);
+  }
+
+  /* ---- Title (zone 1) and catch copy (zone 2) ---- */
+  svg text { font-kerning: normal; }
+  #title text { font-family: "Dela Gothic One", "Noto Sans JP", sans-serif; }
+  #catch text { font-family: "Noto Sans JP", sans-serif; font-weight: 900; }
+
+  /* ---- Focal light behind the four characters ---- */
+  #glow {
+    left: 113px; top: 236px; width: 320px; height: 270px;
+    background: radial-gradient(ellipse at 50% 55%, rgba(255,250,222,.95) 0%, rgba(255,246,206,.6) 35%, rgba(255,246,206,0) 70%);
+  }
+  #spot {
+    left: 140px; top: 468px; width: 266px; height: 34px; border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.95) 0%, rgba(255,255,240,.7) 45%, rgba(255,255,240,0) 72%);
+  }
+
+  /* ---- Layer 2: scene panels ---- */
+  .panel {
+    width: 118px; height: 136px; padding: 1px; border: 2px solid var(--white); border-radius: 7px;
+    background: var(--pale-gold);
+    box-shadow: 0 0 0 1px var(--navy-deep), 0 2px 0 1px rgba(14,21,48,.25);
+  }
+  .panel img { width: 118px; height: 136px; border-radius: 5px; filter: saturate(.8) contrast(.93) blur(.22px); }
+  .tab {
+    position: absolute; left: 4px; top: -15px; height: 13px; padding: 0 5px 0 4px;
+    background: var(--navy); border: 1px solid var(--white); border-radius: 4px;
+    box-shadow: 0 0 0 1px var(--navy-deep), inset 0 0 0 1px var(--navy), inset 0 0 0 1.6px var(--pale-gold);
+    font-size: 9px; line-height: 13px; white-space: nowrap; letter-spacing: .2px;
+  }
+  .tab b, .cmd b { color: var(--gold-hi); font-weight: normal; }
+
+  /* ---- Shared UI window ---- */
+  .win {
+    position: absolute; box-sizing: border-box;
+    background: var(--navy); border: 1.5px solid var(--white); border-radius: 6px;
+    box-shadow: 0 0 0 1px var(--navy-deep), inset 0 0 0 1.5px var(--navy), inset 0 0 0 2.4px var(--pale-gold),
+                0 3px 0 1px rgba(14,21,48,.28);
+  }
+  .cn { position: absolute; width: 1px; height: 1px; background: #FFF4C2;
+        box-shadow: 1px 0 var(--gold), -1px 0 var(--gold), 0 1px var(--gold), 0 -1px var(--gold); }
+  .cn.tl { left: 4px; top: 4px; } .cn.tr { right: 4px; top: 4px; }
+  .cn.bl { left: 4px; bottom: 4px; } .cn.br { right: 4px; bottom: 4px; }
+
+  /* status bar */
+  #status { left: 76px; top: 494px; width: 394px; height: 23px; display: flex; align-items: center; gap: 0; padding: 0 9px 0 12px; }
+  #status .lv { color: var(--gold-hi); font-size: 11px; letter-spacing: .5px; margin-right: 10px; white-space: nowrap; }
+  #status .stat { display: flex; align-items: center; flex: 1; gap: 3px; }
+  #status .stat img { height: 11px; width: auto; }
+  #status .stat span { font-size: 8.5px; white-space: nowrap; }
+  #status .gauge { position: relative; width: 26px; height: 5px; margin-left: auto; margin-right: 6px; background: #0B1226;
+                   box-shadow: 0 0 0 1px #4A5D8E; }
+  #status .gauge i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #7CDB5A, #C9F27A);
+                     box-shadow: 0 0 3px 1px rgba(160,240,110,.75); }
+
+  /* notice window: the most eye-catching UI element */
+  #notice {
+    left: 20px; top: 527px; width: 506px; height: 60px; padding: 7px 16px 0 18px;
+    border: 2px solid #F6D466;
+    box-shadow: 0 0 0 1px var(--navy-deep), inset 0 0 0 1.5px var(--navy), inset 0 0 0 2.4px var(--white),
+                0 0 5px 2px rgba(255,214,90,.85), 0 0 14px 5px rgba(255,220,120,.5);
+    font-size: 19px; line-height: 23px; letter-spacing: .4px;
+  }
+  #notice .k { color: var(--gold-hi); }
+  #notice .next { color: var(--gold-hi); font-size: 14px; margin-left: 6px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* command window */
+  #command {
+    left: 20px; top: 596px; width: 506px; height: 56px; padding: 6px 0 0 30px;
+    display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 21px; font-size: 16px; line-height: 21px;
+  }
+  .cmd { white-space: nowrap; letter-spacing: .4px; }
+  .cmd b { display: inline-block; width: 18px; margin-left: -18px; }
+
+  /* ---- Zone 6: exam information band ---- */
+  #band { left: 0; top: 662px; width: 546px; height: 111px; background: var(--band);
+          box-shadow: inset 0 2px 0 var(--gold), inset 0 3px 0 #FFFFFF; }
+  #dates { left: 20px; top: 674px; width: 148px; height: 87px; background: #FFFFFF; border: 1px solid var(--line);
+           border-radius: 4px; box-sizing: border-box; }
+  .search { width: 196px; height: 38px; display: flex; align-items: center; padding: 0 7px 0 10px; }
+  .slots { display: flex; gap: 2px; flex: 1; }
+  .slot { width: 13px; height: 18px; font-size: 12.5px; line-height: 16px; text-align: center; border-bottom: 1px solid #FFFFFF; }
+  .slot.sp { border-bottom-color: transparent; }
+  .kensaku { height: 16px; padding: 0 5px; border-radius: 3px; background: var(--gold); color: var(--navy-deep);
+             font-size: 9.5px; line-height: 16px; box-shadow: inset 0 1px 0 #FFE89A, inset 0 -1px 0 #B98A1C, 0 0 0 1px var(--navy-deep); }
+  .qr { width: 66px; height: 66px; background: #FFFFFF; border: 1px solid var(--line); box-sizing: border-box; }
+</style>
+</head>
+<body>
+<div id="stage">
+<div id="poster">
+  <!-- Layer 1: background -->
+  <img id="bg" class="full px" src="art/background.png" alt="">
+  <div id="sunlight" class="full"></div>
+
+  <!-- Zone 1: title logo on gold emblem plate -->
+  <img class="full px" src="art/title_plate.png" alt="">
+  <svg id="title" class="abs" style="left:0;top:0" width="546" height="120" viewBox="0 0 546 120">
+    <text x="273" y="87" text-anchor="middle" font-size="56" letter-spacing="2"
+          fill="#1B2A4F" stroke="#1B2A4F" stroke-width="9" stroke-linejoin="round" transform="translate(0 3)">国税専門官募集</text>
+    <text x="273" y="87" text-anchor="middle" font-size="56" letter-spacing="2"
+          fill="#FFFFFF" stroke="#1B2A4F" stroke-width="9" stroke-linejoin="round" paint-order="stroke">国税専門官募集</text>
+  </svg>
+
+  <!-- Zone 2: catch copy -->
+  <svg id="catch" class="abs" style="left:0;top:116px" width="546" height="40" viewBox="0 0 546 40">
+    <text x="273" y="29" text-anchor="middle" font-size="26" letter-spacing="1"
+          fill="#FFFFFF" stroke="#1B2A4F" stroke-width="3.6" stroke-linejoin="round" paint-order="stroke">Lv.1から、社会のど真ん中へ。</text>
+  </svg>
+
+  <!-- Zone 3: main visual -->
+  <div id="glow" class="abs"></div>
+
+  <div class="panel abs" style="left:18px;top:180px">
+    <div class="tab"><b>▶</b> はなしを きく</div>
+    <img class="px" src="art/panel_listen.png" alt="">
+  </div>
+  <div class="panel abs" style="left:18px;top:342px">
+    <div class="tab"><b>▶</b> しらべる</div>
+    <img class="px" src="art/panel_investigate.png" alt="">
+  </div>
+  <div class="panel abs" style="left:404px;top:180px">
+    <div class="tab"><b>▶</b> なかまに そうだん</div>
+    <img class="px" src="art/panel_consult.png" alt="">
+  </div>
+  <div class="panel abs" style="left:404px;top:342px">
+    <div class="tab"><b>▶</b> こたえを だす</div>
+    <img class="px" src="art/panel_answer.png" alt="">
+  </div>
+
+  <div id="spot" class="abs"></div>
+  <img class="full px" src="art/characters.png" alt="">
+  <img class="full px" src="art/petals.png" alt="">
+
+  <div id="status" class="win">
+    <span class="lv">LV 1</span>
+    <div class="stat"><img class="px" src="art/icon_book.png" alt=""><span>ほうりつ</span><div class="gauge"><i style="width:22%"></i></div></div>
+    <div class="stat"><img class="px" src="art/icon_calc.png" alt=""><span>かいけい</span><div class="gauge"><i style="width:18%"></i></div></div>
+    <div class="stat"><img class="px" src="art/icon_talk.png" alt=""><span>コミュ力</span><div class="gauge"><i style="width:26%"></i></div></div>
+    <div class="stat"><img class="px" src="art/icon_bulb.png" alt=""><span>こうきしん</span><div class="gauge"><i style="width:30%"></i></div></div>
+  </div>
+
+  <!-- Zone 4: notice window -->
+  <div id="notice" class="win">
+    <div><span class="k">おしらせ</span>：ことしは しけんにってい が</div>
+    <div>はやく なりました！<span class="next">▼</span></div>
+  </div>
+
+  <!-- Zone 5: command window -->
+  <div id="command" class="win">
+    <div class="cmd"><b>▶</b>はなしを きく</div>
+    <div class="cmd">しらべる</div>
+    <div class="cmd">なかまに そうだん</div>
+    <div class="cmd">こたえを だす</div>
+  </div>
+
+  <!-- Zone 6: information band -->
+  <div id="band" class="abs"></div>
+  <div id="dates" class="abs"></div>
+  <div class="search win" style="left:178px;top:675px">
+    <div class="slots"><span class="slot">国</span><span class="slot">税</span><span class="slot">専</span><span class="slot">門</span><span class="slot">官</span></div>
+    <span class="kensaku">けんさく</span>
+  </div>
+  <div class="search win" style="left:178px;top:722px">
+    <div class="slots"><span class="slot">国</span><span class="slot">税</span><span class="slot">庁</span><span class="slot sp"></span><span class="slot">採</span><span class="slot">用</span><span class="slot">動</span><span class="slot">画</span></div>
+    <span class="kensaku">けんさく</span>
+  </div>
+  <div class="qr abs" style="left:384px;top:685px"></div>
+  <div class="qr abs" style="left:460px;top:685px"></div>
+</div>
+</div>
+<script>
+  // pixel-accent corners on every UI window
+  document.querySelectorAll('.win, .tab').forEach(function (w) {
+    if (w.classList.contains('tab')) return;
+    ['tl', 'tr', 'bl', 'br'].forEach(function (k) {
+      var i = document.createElement('i'); i.className = 'cn ' + k; w.appendChild(i);
+    });
+  });
+  // fit to the browser window unless rendering for print
+  function fit() {
+    if (location.search.indexOf('render') >= 0) return;
+    var s = Math.min(window.innerWidth / 546, window.innerHeight / 773);
+    document.getElementById('stage').style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>
