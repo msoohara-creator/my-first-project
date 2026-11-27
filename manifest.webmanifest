@@ -1,0 +1,19 @@
+{
+  "name": "ミミドク — 耳読書の積読リスト",
+  "short_name": "ミミドク",
+  "description": "audiobook.jp と Audible の「次に聴く」リストを見える化し、1日1回の耳読書を習慣にするアプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#12161f",
+  "theme_color": "#1d2433",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  }
+}
